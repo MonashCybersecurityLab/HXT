@@ -1,0 +1,15 @@
+# sbt #
+target/
+
+# Environment #
+/lib
+/data
+.DS_Store
+
+# SBT #
+project/project
+project/build.properties
+
+# IDEA #
+.idea/
+*.iml
