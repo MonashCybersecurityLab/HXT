@@ -15,46 +15,7 @@ import org.apache.hadoop.hbase.client.{ConnectionFactory, Get, Scan}
 import org.apache.hadoop.hbase.spark.HBaseContext
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.hbase.{HBaseConfiguration, TableName}
-import org.apache.spark.util.AccumulatorV2
 import org.apache.spark.{SparkConf, SparkContext}
-
-class ByteAccumulator extends AccumulatorV2[Array[Byte], Array[Byte]] {
-  private var myValue: Array[Byte] = new Array[Byte](16)
-
-  def reset(): Unit = {
-    myValue = new Array[Byte](16)
-  }
-
-  override def merge(other: AccumulatorV2[Array[Byte], Array[Byte]]): Unit = other match {
-    case o: ByteAccumulator =>
-      require(other.value.length == myValue.length)
-      add(other.value)
-    case _ => throw new UnsupportedOperationException(
-      s"Cannot merge ${this.getClass.getName} with ${other.getClass.getName}")
-  }
-
-  def add(v2: Array[Byte]): Unit = {
-    require(v2.length == myValue.length)
-    for (i <- myValue.indices) {
-      myValue(i) = (myValue(i) ^ v2(i)).toByte
-    }
-  }
-
-  override def isZero: Boolean = {
-    for (elem <- myValue) {
-      if (elem != 0) false
-    }
-    true
-  }
-
-  override def copy(): AccumulatorV2[Array[Byte], Array[Byte]] = {
-    val newAcc = new ByteAccumulator
-    newAcc.myValue = this.myValue.clone
-    newAcc
-  }
-
-  override def value: Array[Byte] = myValue
-}
 
 object QueryHXT {
   def main(args: Array[String]): Unit = {
