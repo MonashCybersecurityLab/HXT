@@ -1,4 +1,4 @@
-#HXT
+# HXT
 
 HXT is a new searchable encryption scheme which supports efficient conjunctive queries. The proposed new scheme is based on the OXT [2]. Compared with OXT, it retains the *sub-linear* asymptotic search complexity for conjunctive queries but reaches better performance regarding its security. HXT is a part of our ACM CCS'18 paper [1]. 
 
